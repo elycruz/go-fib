@@ -50,7 +50,7 @@ func printNumList (list []int ) {
 
 func main() {
 	if len(os.Args) == 1 {
-		fmt.Println("`fib` requires at least one argument of type int")
+		fmt.Println("`fib` requires one flag 'n' for fib at index 'n' or 'l' for fib close-to/upto some limit")
 		return
 	}
 
