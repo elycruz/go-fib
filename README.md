@@ -40,4 +40,4 @@ See './math/Fib.go' for exported.
 - Binet's Formula for nth Fib num: http://www.maths.surrey.ac.uk/hosted-sites/R.Knott/Fibonacci/fibFormula.html
 
 ## License
-BSD 3
+BSD 3-clause "New" or "Revised" license
