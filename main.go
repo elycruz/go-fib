@@ -5,44 +5,10 @@ import (
 	"os"
 	"strconv"
 	"flag"
+	fib "github.com/elycruz/go-fib/math"
 )
 
-type fibPred func (x int, ind int) bool
-
-func fibWhile (aPred fibPred, bPred fibPred) [] int {
-	a := 1
-	b := 1
-	out := []int{}
-	ind := 0
-	for aPred(a, ind) {
-		out = append(out, a, b)
-		if bPred(b, ind) { out = append(out, b) }
-		a = a + b
-		b = a + b
-		ind += 1
-	}
-	return out
-}
-
-func fib (limit int) [] int {
-	return fibWhile(
-		func (a int, ind int) bool {
-			return a <= limit
-		},
-		func (b int, ind int) bool {
-			return b <= limit
-		})
-}
-
-func fibIterations (numInts int) [] int {
-	lte := func (_, ind int) bool {
-		return ind <= numInts
-	}
-
-	return fibWhile(lte, lte)
-}
-
-func printNumList (list []int ) {
+func printNumList (list []uint64 ) {
 	for _, value := range list {
 		fmt.Print(value, " ")
 	}
@@ -50,26 +16,28 @@ func printNumList (list []int ) {
 
 func main() {
 	if len(os.Args) == 1 {
-		fmt.Println("`fib` requires one flag 'n' for fib at index 'n' or 'l' for fib close-to/upto some limit")
+		fmt.Println("`FibByLimit` requires one flag 'n' for FibByLimit at index 'n' or 'l' for FibByLimit close-to/upto some limit")
 		return
 	}
 
-	byLimit := flag.Int("l", 0, "Limit or \"upto limit\"")
-	byNumber := flag.Int("n", 0, "Number or 'x' \"number\" results")
+	byLimit := flag.Uint64("l", 0, "Prints fib numbers up to 'closest to limit' or 'up to limit' where `l` is 'limit'")
+	byIterations := flag.Uint64("i", 0, "Prints fib numbers up to 'i' iterations")
+	byNumber := flag.Uint64("n", 0, "Prints fib number index 'n'")
 
 	flag.Parse();
 
 	if *byLimit > 0 {
-		printNumList(fib(*byLimit))
-		return
+		printNumList(fib.FibByLimit(*byLimit))
 	} else if *byNumber > 0 {
-		printNumList(fibIterations(*byNumber))
-		return
+		fmt.Println(fib.NthFibNumber(*byNumber))
+	} else if *byIterations > 0 {
+		printNumList(fib.FibByIterations(*byNumber))
+	} else {
+		limit, err := strconv.ParseUint(os.Args[1], 10, 64)
+		if err != nil {
+			fmt.Println("Unable to convert value to `int`.  Value passed in: ", limit)
+		}
+		printNumList(fib.FibByLimit(limit))
 	}
 
-	limit, err := strconv.Atoi(os.Args[1])
-	if err != nil {
-		fmt.Println("Unable to convert value to `int`.  Value passed in: ", limit)
-		return
-	}
 }
